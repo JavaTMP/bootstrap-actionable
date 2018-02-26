@@ -1,5 +1,6 @@
 # Bootstrap Actionable
-Bootstrap modal wrapper factory for creating dynamic and nested stacked dialog features.
+A small Javascript code that help implement click event actions for <a> and <button> tags by declarative way
+and provide functionalities to load AJAX content in Bootstrap Modal Wrapper instance.
 
 ## Installation Using NPM
 ```
