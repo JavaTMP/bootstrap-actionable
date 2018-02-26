@@ -1,5 +1,5 @@
 # Bootstrap Actionable
-A small Javascript code that help implement click event actions for <a> and <button> tags by declarative way
+A small Javascript code that help implement click event actions for a and button tags by declarative way
 and provide functionalities to load AJAX content in Bootstrap Modal Wrapper instance.
 
 ## Installation Using NPM
