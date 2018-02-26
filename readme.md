@@ -16,4 +16,4 @@ gulp
 ```
 
 ## Copyright and License
-Bootstrap-modal-wrapper is copyrighted by [JavaTMP](http://www.javatmp.com) and licensed under [MIT license](https://github.com/JavaTMP/bootstrap-modal-wrapper/blob/master/LICENSE).
+bootstrap-actionable is copyrighted by [JavaTMP](http://www.javatmp.com) and licensed under [MIT license](https://github.com/JavaTMP/bootstrap-actionable/blob/master/LICENSE).
