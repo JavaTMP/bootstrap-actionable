@@ -1,6 +1,6 @@
 {
     "name": "bootstrap-actionable",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Actionable plugin is a small Javascript code that help implement click actions for a and button tags by declarative way and provide functionalities to load AJAX content in Bootstrap Modal Wrapper instance.",
     "keywords": [
         "bootstrap",
@@ -19,7 +19,8 @@
         "gulp": "^3.9.1",
         "gulp-eslint": "^4.0.2",
         "gulp-rename": "^1.2.2",
-        "gulp-uglify": "^3.0.0"
+        "gulp-uglify": "^3.0.0",
+        "gulp-header": "^2.0.1"
     },
     "dependencies": {
         "jquery": "^3.3.1",

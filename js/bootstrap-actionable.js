@@ -1,12 +1,3 @@
-/*!
- * bootstrap-actionable v1.0.0 (http://javatmp.com)
- * A small Javascript code that help implement click event actions for <a> and <button> tags by declarative way
- * and provide functionalities to load AJAX content in Bootstrap Modal Wrapper instance.
- *
- * Copyright 2018 JavaTMP
- * Licensed under MIT (https://github.com/JavaTMP/bootstrap-actionable/blob/master/LICENSE)
- */
-
 (function (root, factory) {
     "use strict";
     // CommonJS module is defined

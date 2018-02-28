@@ -1,17 +1,23 @@
-/*!
- * bootstrap-actionable v1.0.0 (http://javatmp.com)
- * A small Javascript code that help implement click event actions for <a> and <button> tags by declarative way
- * and provide functionalities to load AJAX content in Bootstrap Modal Wrapper instance.
- *
- * Copyright 2018 JavaTMP
- * Licensed under MIT (https://github.com/JavaTMP/bootstrap-actionable/blob/master/LICENSE)
- */
 
 var gulp = require('gulp');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var del = require('del');
+var fs = require('fs');
 var eslint = require('gulp-eslint');
+var header = require('gulp-header');
+var pkg = require('./package.json');
+
+var banner = ['/*!',
+    ' * <%= pkg.name %> (http://javatmp.com)',
+    ' * <%= pkg.description %>',
+    ' *',
+    ' * @version <%= pkg.version %>',
+    ' * @link <%= pkg.homepage %>',
+    ' * @copyright 2018 JavaTMP',
+    ' * @license <%= pkg.license %>',
+    ' */',
+    ''].join('\n');
 
 gulp.task('clean', function () {
     return del(['./dist']);
@@ -36,6 +42,7 @@ gulp.task('dist', ["clean"], function (cb) {
             }))
             .pipe(eslint.format())
             .pipe(uglify({output: {comments: /^!/}}))
+            .pipe(header(banner, {pkg: pkg}))
             .pipe(rename({suffix: '.min'}))
             .pipe(gulp.dest('./dist/'));
 });
