@@ -20,6 +20,7 @@
     var defaults = {
         loadingHtml: "Loading ...",
         ajaxHttpMethod: "GET",
+        dataType: "HTML",
         ajaxContainerReady: "ajax-container-ready"
     };
 
@@ -38,7 +39,13 @@
             var actionScope = $(this).attr("actionScope") ? $(this).attr("actionScope") : "html";
             if (actionType === "ajax-model") {
                 var href = $(this).attr("href") ? $(this).attr("href") : $(this).attr("actionLink");
-                $this.fetchAjaxContentByModal(href);
+                BootstrapModalWrapperFactory.createAjaxModal({
+                    message: $this.options.loadingHtml,
+                    dataType: $this.options.dataType,
+                    httpMethod: $this.options.ajaxHttpMethod,
+                    ajaxContainerReadyEventName: $this.options.ajaxContainerReady,
+                    url: href
+                });
             } else if (actionType === "action-ref") {
                 var actionRefName = $(this).attr("action-ref-by-name") ? $(this).attr("action-ref-by-name") : "";
                 if ($(actionScope + " [action-name='" + actionRefName + "']").length > 0)
@@ -59,55 +66,5 @@
             }
         });
     };
-
-    BootstrapActionable.prototype.fetchAjaxContentByModal = function (remoteUrl, passData) {
-        var $this = this;
-        var ajaxModalContainer = BootstrapModalWrapperFactory.createModal({
-            message: $this.options.loadingHtml,
-            closable: false,
-            closeByBackdrop: false,
-            closeByKeyboard: false
-        });
-        ajaxModalContainer.originalModal.removeClass("fade");
-        ajaxModalContainer.originalModal.find(".modal-dialog").css({transition: 'all .3s'});
-
-        ajaxModalContainer.show();
-
-        if (passData === undefined) {
-            passData = {};
-        }
-
-        passData["ajaxModalId"] = ajaxModalContainer.options.id;
-
-        $.ajax({
-            type: $this.options.ajaxHttpMethod,
-            dataType: "html",
-            url: remoteUrl,
-            data: {},
-            success: function (response, textStatus, jqXHR) {
-                // make sure the modal dialog is open before update
-                // its body with ajax response and triggering javaTmpAjaxContainerReady event.
-                var timeOut = 700;
-                function runWhenDialogOpen() {
-//                    console.log("time out [" + Math.round(timeOut / 2) + "], isOpen [" + ajaxModalContainer.isOpen + "], is show [" + ajaxModalContainer.originalModal.hasClass("show") + "]");
-                    if (ajaxModalContainer.isOpen) {
-                        ajaxModalContainer.updateSize("modal-lg");
-                        setTimeout(function () {
-                            ajaxModalContainer.updateMessage(response);
-                            setTimeout(function () {
-                                $("#" + ajaxModalContainer.options.id).trigger($this.options.ajaxContainerReady, [ajaxModalContainer]);
-                            }, 0);
-                        }, 350);
-                    } else {
-                        timeOut = timeOut <= 50 ? 50 : Math.round(timeOut / 2);
-                        setTimeout(runWhenDialogOpen, timeOut);
-
-                    }
-                }
-                runWhenDialogOpen();
-            }
-        });
-    };
-
     return new BootstrapActionable();
 }));
