@@ -48,8 +48,15 @@
                 });
             } else if (actionType === "action-ref") {
                 var actionRefName = $(this).attr("action-ref-by-name") ? $(this).attr("action-ref-by-name") : "";
-                if ($(actionScope + " [action-name='" + actionRefName + "']").length > 0)
-                    $(actionScope + " [action-name='" + actionRefName + "']:first").trigger("click");
+                if ($(actionScope + " [action-name='" + actionRefName + "']").length > 0) {
+                    var linkTag = $(actionScope + " [href='" + actionRefName + "']:first");
+                    // check if current link tag has attribute target
+                    if (linkTag.attr('target')) {
+                        window.open(linkTag.attr("href"), linkTag.attr('target'));
+                    } else {
+                        $(linkTag).trigger("click");
+                    }
+                }
             } else if (actionType === "action-ref-href") {
                 var actionRefName = $(this).attr("action-ref-by-href") ? $(this).attr("action-ref-by-href") : "";
                 if ($(actionScope + " [href='" + actionRefName + "']").length > 0) {
