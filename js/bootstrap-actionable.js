@@ -49,7 +49,7 @@
             } else if (actionType === "action-ref") {
                 var actionRefName = $(this).attr("action-ref-by-name") ? $(this).attr("action-ref-by-name") : "";
                 if ($(actionScope + " [action-name='" + actionRefName + "']").length > 0) {
-                    var linkTag = $(actionScope + " [href='" + actionRefName + "']:first");
+                    var linkTag = $(actionScope + " [action-name='" + actionRefName + "']:first");
                     // check if current link tag has attribute target
                     if (linkTag.attr('target')) {
                         window.open(linkTag.attr("href"), linkTag.attr('target'));
