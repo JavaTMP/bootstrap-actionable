@@ -38,15 +38,18 @@
             event.preventDefault();
             var actionType = $(this).attr("actionType") ? $(this).attr("actionType") : "ajax";
             var actionScope = $(this).attr("actionScope") ? $(this).attr("actionScope") : "html";
+            var actionableOptionsData = $(this).data("actionableOptions");
             if (actionType === "ajax-model") {
                 var href = $(this).attr("href") ? $(this).attr("href") : $(this).attr("actionLink");
-                BootstrapModalWrapperFactory.createAjaxModal({
+                var defaultAjaxModelOptions = {
                     message: $this.options.loadingHtml,
                     dataType: $this.options.dataType,
                     httpMethod: $this.options.ajaxHttpMethod,
                     ajaxContainerReadyEventName: $this.options.ajaxContainerReady,
                     url: href
-                });
+                };
+                $.extend(true, defaultAjaxModelOptions, actionableOptionsData);
+                BootstrapModalWrapperFactory.createAjaxModal(defaultAjaxModelOptions);
             } else if (actionType === "action-ref") {
                 var actionRefName = $(this).attr("action-ref-by-name") ? $(this).attr("action-ref-by-name") : "";
                 if ($(actionScope + " [action-name='" + actionRefName + "']").length > 0) {
