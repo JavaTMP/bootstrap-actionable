@@ -28,6 +28,7 @@
     function BootstrapActionable() {
         this.options = $.extend({}, defaults);
         this.init();
+        this.registerJQueryPlugin();
     }
 
     BootstrapActionable.prototype.init = function () {
@@ -73,5 +74,97 @@
             }
         });
     };
+
+    BootstrapActionable.prototype.registerJQueryPlugin = function () {
+        $.fn.BootstrapActionable = function (options) {
+            function BootstrapActionable(element, defaults) {
+                this.options = $.extend(true, {}, {
+                    outputElement: element,
+                    containerRemoveEventName: "containerRemoveEventName",
+                    containerReadyEventName: "containerReadyEventName",
+                    ajaxBeforeSend: null,
+                    ajaxSuccess: function (response, textStatus, jqXHR) {
+                        var $that = this;
+                        $($that.outputElement).html(response).promise().done(function () {
+                            setTimeout(function () {
+                                $($that.outputElement).trigger(javatmp.settings.javaTmpAjaxContainerReady);
+                            }, 0);
+                        });
+                    },
+                    ajaxError: function (jqXHR, textStatus, errorThrown) {
+                        $(this.outputElement).html("Error Loading Request !!!");
+                    }
+                }, defaults);
+            }
+
+            var populate = function (localOptions) {
+                var $this = localOptions.linkElement;
+                var event = localOptions.linkEvent;
+                event.preventDefault();
+                var javaTmpRemoveEvent = $.Event(localOptions.containerRemoveEventName, {_newTarget: $this});
+                $(localOptions.outputElement).trigger(javaTmpRemoveEvent).promise().done(function () {
+                    if (!javaTmpRemoveEvent.isDefaultPrevented()) {
+                        $(localOptions.outputElement).off(localOptions.containerReadyEventName).promise().done(function () {
+                            $(localOptions.outputElement).off(localOptions.containerRemoveEventName).promise().done(function () {
+                                $(localOptions.outputElement).off(javaTmpRemoveEvent).promise().done(function () {
+                                    $.ajax({
+                                        type: javatmp.settings.httpMethod,
+                                        async: true,
+                                        cache: true,
+                                        dataType: javatmp.settings.dataType,
+                                        url: $this.attr("href"),
+                                        data: javatmp.settings.defaultPassData,
+                                        beforeSend: function (jqXHR, settings) {
+                                            if ($.isFunction(localOptions.ajaxBeforeSend)) {
+                                                return localOptions.ajaxBeforeSend.call(localOptions, jqXHR, settings);
+                                            }
+                                        },
+                                        success: function (response, textStatus, jqXHR) {
+                                            if ($.isFunction(localOptions.ajaxSuccess)) {
+                                                return localOptions.ajaxSuccess.call(localOptions, response, textStatus, jqXHR);
+                                            }
+                                        },
+                                        error: function (jqXHR, textStatus, errorThrown) {
+                                            if ($.isFunction(localOptions.ajaxError)) {
+                                                return localOptions.ajaxError.call(localOptions, jqXHR, textStatus, errorThrown);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        });
+                    }
+                });
+            };
+
+            BootstrapActionable.prototype.populateByLinkEvent = function (populateOptions) {
+                var localOptions = $.extend(true, {}, this.options, populateOptions);
+                populate(localOptions);
+            };
+            //expose methods
+            if (typeof options === 'string') {
+                var args = Array.prototype.slice.call(arguments, 1);
+                if ($.isFunction(this.data('BootstrapActionable')[options])) {
+                    return this.data('BootstrapActionable')[options].apply(this.data('BootstrapActionable'), args);
+                } else {
+                    throw new Error("Function [" + options + "] does not found in plugin BootstrapActionable");
+                }
+            }
+            return this.each(function (index) {
+                var element = $(this);
+
+                // Return early if this element already has a plugin instance
+                if (element.data('BootstrapActionable'))
+                    return element.data('BootstrapActionable');
+                // pass options to plugin constructor
+                var bootstrapActionableInstance = new BootstrapActionable(element, options);
+                // Store plugin object in this element's data
+                element.data('BootstrapActionable', bootstrapActionableInstance);
+                return bootstrapActionableInstance;
+            });
+        }
+        ;
+    };
+
     return new BootstrapActionable();
 }));
