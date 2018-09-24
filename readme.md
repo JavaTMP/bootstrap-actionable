@@ -137,6 +137,6 @@ The following HTML code is the response of above AJAX request:
     </script>
 </div>
 ```
-S
+
 ## Copyright and License
 bootstrap-actionable is copyrighted by [JavaTMP](http://www.javatmp.com) and licensed under [MIT license](https://github.com/JavaTMP/bootstrap-actionable/blob/master/LICENSE).
