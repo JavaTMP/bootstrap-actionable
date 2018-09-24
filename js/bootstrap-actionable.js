@@ -85,12 +85,16 @@
                     outputElement: element,
                     containerRemoveEventName: "containerRemoveEventName",
                     containerReadyEventName: "containerReadyEventName",
+                    ajaxMethodType: "GET",
+                    ajaxCache: true,
+                    ajaxDefaultData: {},
+                    ajaxDataType: "html",
                     ajaxBeforeSend: null,
                     ajaxSuccess: function (response, textStatus, jqXHR) {
                         var $that = this;
                         $($that.outputElement).html(response).promise().done(function () {
                             setTimeout(function () {
-                                $($that.outputElement).trigger(javatmp.settings.javaTmpAjaxContainerReady);
+                                $($that.outputElement).trigger($that.containerReadyEventName);
                             }, 0);
                         });
                     },
@@ -104,19 +108,19 @@
                 var $this = localOptions.linkElement;
                 var event = localOptions.linkEvent;
                 event.preventDefault();
-                var javaTmpRemoveEvent = $.Event(localOptions.containerRemoveEventName, {_newTarget: $this});
-                $(localOptions.outputElement).trigger(javaTmpRemoveEvent).promise().done(function () {
-                    if (!javaTmpRemoveEvent.isDefaultPrevented()) {
+                var removeEvent = $.Event(localOptions.containerRemoveEventName, {_newTarget: $this});
+                $(localOptions.outputElement).trigger(removeEvent).promise().done(function () {
+                    if (!removeEvent.isDefaultPrevented()) {
                         $(localOptions.outputElement).off(localOptions.containerReadyEventName).promise().done(function () {
                             $(localOptions.outputElement).off(localOptions.containerRemoveEventName).promise().done(function () {
-                                $(localOptions.outputElement).off(javaTmpRemoveEvent).promise().done(function () {
+                                $(localOptions.outputElement).off(removeEvent).promise().done(function () {
                                     $.ajax({
-                                        type: javatmp.settings.httpMethod,
+                                        type: localOptions.ajaxMethodType,
                                         async: true,
-                                        cache: true,
-                                        dataType: javatmp.settings.dataType,
+                                        cache: localOptions.ajaxCache,
+                                        dataType: localOptions.ajaxDataType,
                                         url: $this.attr("href"),
-                                        data: javatmp.settings.defaultPassData,
+                                        data: localOptions.ajaxDefaultData,
                                         beforeSend: function (jqXHR, settings) {
                                             if ($.isFunction(localOptions.ajaxBeforeSend)) {
                                                 return localOptions.ajaxBeforeSend.call(localOptions, jqXHR, settings);
