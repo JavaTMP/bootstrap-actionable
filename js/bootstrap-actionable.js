@@ -94,7 +94,7 @@
                         var $that = this;
                         $($that.outputElement).html(response).promise().done(function () {
                             setTimeout(function () {
-                                $($that.outputElement).trigger($that.containerReadyEventName);
+                                $($that.outputElement).triggerHandler($that.containerReadyEventName);
                             }, 0);
                         });
                     },
@@ -109,7 +109,7 @@
                 var event = localOptions.linkEvent;
                 event.preventDefault();
                 var removeEvent = $.Event(localOptions.containerRemoveEventName, {_newTarget: $this});
-                $(localOptions.outputElement).trigger(removeEvent).promise().done(function () {
+                $(localOptions.outputElement).triggerHandler(removeEvent).promise().done(function () {
                     if (!removeEvent.isDefaultPrevented()) {
                         $(localOptions.outputElement).off(localOptions.containerReadyEventName).promise().done(function () {
                             $(localOptions.outputElement).off(localOptions.containerRemoveEventName).promise().done(function () {
