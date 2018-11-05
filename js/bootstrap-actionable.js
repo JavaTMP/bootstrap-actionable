@@ -109,39 +109,36 @@
                 var event = localOptions.linkEvent;
                 event.preventDefault();
                 var removeEvent = $.Event(localOptions.containerRemoveEventName, {_newTarget: $this});
-                $(localOptions.outputElement).triggerHandler(removeEvent).promise().done(function () {
-                    if (!removeEvent.isDefaultPrevented()) {
-                        $(localOptions.outputElement).off(localOptions.containerReadyEventName).promise().done(function () {
-                            $(localOptions.outputElement).off(localOptions.containerRemoveEventName).promise().done(function () {
-                                $(localOptions.outputElement).off(removeEvent).promise().done(function () {
-                                    $.ajax({
-                                        type: localOptions.ajaxMethodType,
-                                        async: true,
-                                        cache: localOptions.ajaxCache,
-                                        dataType: localOptions.ajaxDataType,
-                                        url: $this.attr("href"),
-                                        data: localOptions.ajaxDefaultData,
-                                        beforeSend: function (jqXHR, settings) {
-                                            if ($.isFunction(localOptions.ajaxBeforeSend)) {
-                                                return localOptions.ajaxBeforeSend.call(localOptions, jqXHR, settings);
-                                            }
-                                        },
-                                        success: function (response, textStatus, jqXHR) {
-                                            if ($.isFunction(localOptions.ajaxSuccess)) {
-                                                return localOptions.ajaxSuccess.call(localOptions, response, textStatus, jqXHR);
-                                            }
-                                        },
-                                        error: function (jqXHR, textStatus, errorThrown) {
-                                            if ($.isFunction(localOptions.ajaxError)) {
-                                                return localOptions.ajaxError.call(localOptions, jqXHR, textStatus, errorThrown);
-                                            }
-                                        }
-                                    });
-                                });
+                var removeResponse = $(localOptions.outputElement).triggerHandler(removeEvent);
+                if (!removeEvent.isDefaultPrevented()) {
+                    $(localOptions.outputElement).off(localOptions.containerReadyEventName).promise().done(function () {
+                        $(localOptions.outputElement).off(localOptions.containerRemoveEventName).promise().done(function () {
+                            $.ajax({
+                                type: localOptions.ajaxMethodType,
+                                async: true,
+                                cache: localOptions.ajaxCache,
+                                dataType: localOptions.ajaxDataType,
+                                url: $this.attr("href"),
+                                data: localOptions.ajaxDefaultData,
+                                beforeSend: function (jqXHR, settings) {
+                                    if ($.isFunction(localOptions.ajaxBeforeSend)) {
+                                        return localOptions.ajaxBeforeSend.call(localOptions, jqXHR, settings);
+                                    }
+                                },
+                                success: function (response, textStatus, jqXHR) {
+                                    if ($.isFunction(localOptions.ajaxSuccess)) {
+                                        return localOptions.ajaxSuccess.call(localOptions, response, textStatus, jqXHR);
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    if ($.isFunction(localOptions.ajaxError)) {
+                                        return localOptions.ajaxError.call(localOptions, jqXHR, textStatus, errorThrown);
+                                    }
+                                }
                             });
                         });
-                    }
-                });
+                    });
+                }
             };
 
             BootstrapActionable.prototype.populateByLinkEvent = function (populateOptions) {
