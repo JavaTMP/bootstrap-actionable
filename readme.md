@@ -102,10 +102,10 @@ Pressing the above link will make actionable invokes the following method:
 ```
 BootstrapModalWrapperFactory.createAjaxModal({
     message: $this.options.loadingHtml,
-    dataType: $this.options.dataType,
-    httpMethod: $this.options.ajaxHttpMethod,
     ajaxContainerReadyEventName: $this.options.ajaxContainerReady,
-    url: href
+    ajax : {
+        url: href
+    }
 });
 ```
 The following HTML code is the response of above AJAX request:
@@ -128,8 +128,8 @@ The following HTML code is the response of above AJAX request:
                 modal.addButton({
                     label: "Close",
                     cssClass: "btn btn-primary",
-                    action: function (modalWrapper, button, buttonData, originalEvent) {
-                        return modalWrapper.hide();
+                    action: function (button, buttonData, originalEvent) {
+                        return this.hide();
                     }
                 });
             });
