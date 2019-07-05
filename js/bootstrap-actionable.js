@@ -43,10 +43,12 @@
                 var href = $(this).attr("href") ? $(this).attr("href") : $(this).attr("actionLink");
                 var defaultAjaxModelOptions = {
                     message: $this.options.loadingHtml,
-                    dataType: $this.options.dataType,
-                    httpMethod: $this.options.ajaxHttpMethod,
                     ajaxContainerReadyEventName: $this.options.ajaxContainerReady,
-                    url: href
+                    ajax: {
+                        dataType: $this.options.dataType,
+                        httpMethod: $this.options.ajaxHttpMethod,
+                        url: href
+                    }
                 };
                 $.extend(true, defaultAjaxModelOptions, actionableOptionsData);
                 BootstrapModalWrapperFactory.createAjaxModal(defaultAjaxModelOptions);

@@ -19,11 +19,11 @@ var banner = ['/*!',
     ' */',
     ''].join('\n');
 
-gulp.task('clean', function () {
-    return del(['./dist']);
+gulp.task('clean', function (cb) {
+    return del.sync(['./dist'], cb());
 });
 
-gulp.task('dist', ["clean"], function (cb) {
+gulp.task('dist', gulp.series("clean", function (cb) {
     return gulp.src('./js/bootstrap-actionable.js')
             .pipe(eslint({
                 "env": {"browser": true, "node": true, "jquery": true},
@@ -44,9 +44,14 @@ gulp.task('dist', ["clean"], function (cb) {
             .pipe(uglify({output: {comments: /^!/}}))
             .pipe(header(banner, {pkg: pkg}))
             .pipe(rename({suffix: '.min'}))
-            .pipe(gulp.dest('./dist/'));
-});
+            .pipe(gulp.dest('./dist/'))
+            .on('end', function () {
+                cb();
+            });
+}));
 
-gulp.task('default', ["dist"], function () {
+gulp.task('default', gulp.series("dist", function (cb) {
     // place code for your default task here
-});
+    cb();
+
+}));
